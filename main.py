@@ -4,7 +4,7 @@ import os, pygame, json
 from pygame.locals import *
 from utils import *
 from modes import ModeManager, GameMode, SimpleMode
-
+##hi
 kDataDir = 'data'
 kGlobals = 'globals.json'
 globals = ''
