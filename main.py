@@ -4,7 +4,7 @@ import os, pygame, json
 from pygame.locals import *
 from utils import *
 from modes import ModeManager, GameMode, SimpleMode
-##hi
+
 kDataDir = 'data'
 kGlobals = 'globals.json'
 globals = ''
@@ -38,6 +38,7 @@ class Cutscene(GameMode):
         Show the mouse.
         '''
         pygame.mouse.set_visible( 1 )
+        self.sound.stop()
     
     def draw( self, screen ):
         '''
@@ -99,6 +100,7 @@ class Room( GameMode ):
         self.mouse_down_pos = (-1,-1)
         
     def _changeRoom(self, target):
+        
         if target is 'Bedroom':
             self.roomName = 'Bedroom'
             self.image, _ = load_image('NotePillow.jpg')
@@ -134,6 +136,7 @@ class Room( GameMode ):
             self.image, _ = load_image('PepperNote.jpg')
             self.hotspots = []
             self.exits = []
+            self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Kitchen'))
             self.hotspots.append(Hotspot(pygame.Rect(200,245,100,85), load_sound('ReadCombination.wav'), "combination"))
             
         elif target is 'Garage':
@@ -190,15 +193,19 @@ class Room( GameMode ):
         
     def mouse_button_down( self, event ):
         self.mouse_down_pos = event.pos
+        
     
     def mouse_button_up( self, event ):
-        
+        for hotspot in self.hotspots:
+            hotspot.sound.stop()
+            
         def collides_down_and_up( r ):
             return r.collidepoint( self.mouse_down_pos ) and r.collidepoint( event.pos )
 
         for hotspot in self.hotspots:
             if collides_down_and_up( hotspot.rect):
                 hotspot.sound.play()
+                
                 if self.roomName is 'Kitchen' and hotspot.name is 'cookie':
                     self.globals['cookieEaten'] = 1
                     self._changeRoom('Kitchen')
@@ -206,7 +213,7 @@ class Room( GameMode ):
                     self._changeRoom('Pepper')
                 elif self.roomName is 'Pepper' and hotspot.name is 'combination':
                     self.globals['haveCombination'] = 1
-                    self._changeRoom('Kitchen')
+                    ##self._changeRoom('Kitchen')
                 elif self.roomName is 'Attic' and hotspot.name is 'switch':
                     self.globals['atticDark'] = 0
                     self._changeRoom('Attic')
