@@ -1,3 +1,9 @@
+Version 0.2a
+04/14/2013
+2:47 PM
+Implemented Splash, Main Menu, and Pause screen frameworks
+Cutscenes are skippable by clicking or pressing escape
+
 Version 0.1a
 04/10/2013
 3:17 PM

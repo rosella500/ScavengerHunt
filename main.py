@@ -9,6 +9,9 @@ kDataDir = 'data'
 kGlobals = 'globals.json'
 globals = ''
 
+##Keep track of last gameMode (room)
+global lastMode
+
 class Cutscene(GameMode):
     def __init__( self, image, sound, duration_in_milliseconds, next_mode_name ):
         '''
@@ -38,7 +41,8 @@ class Cutscene(GameMode):
         Show the mouse.
         '''
         pygame.mouse.set_visible( 1 )
-        self.sound.stop()
+        if (type(self.sound).__name__ != 'instance'):
+            self.sound.stop()
     
     def draw( self, screen ):
         '''
@@ -57,6 +61,95 @@ class Cutscene(GameMode):
         ## Have we shown the image long enough?
         if self.so_far > self.duration:
             self.switch_to_mode( self.next_mode_name )
+            
+    def mouse_button_down(self,event):
+        if (type(self.sound).__name__ != 'instance'):
+            self.sound.stop()
+        self.switch_to_mode(self.next_mode_name)
+        
+    def key_down(self,event):
+        if event.key == K_ESCAPE:
+            if (type(self.sound).__name__ != 'instance'):
+                self.sound.stop()
+            self.switch_to_mode(self.next_mode_name)
+
+class MainMenu( GameMode ):
+    def __init__( self ):
+        ## Initialize the superclass.
+        GameMode.__init__( self )
+        
+        self.image, _ = load_image( 'MainMenu.jpg' )
+        ##load and play music
+        try:
+            backgroundMusic = os.path.join(kDataDir,'Eternal Memory.ogg')
+            pygame.mixer.music.load( backgroundMusic )
+        except pygame.error, message:
+            print 'Cannot load music:'
+            raise SystemExit, message
+        self.start_rect = pygame.Rect( 12, 81, 173, 111 )
+        
+        self.mouse_down_pos = (-1,-1)
+    
+    def enter(self):
+        pass
+        pygame.mixer.music.play(1)
+        
+    def exit(self):
+        pass
+        pygame.mixer.music.stop()
+    
+    def mouse_button_down( self, event ):
+        self.mouse_down_pos = event.pos
+    
+    def mouse_button_up( self, event ):
+        
+        def collides_down_and_up( r ):
+            return r.collidepoint( self.mouse_down_pos ) and r.collidepoint( event.pos )
+        
+        if collides_down_and_up( self.start_rect ):
+            print 'play!'
+            self.switch_to_mode( 'Intro' )
+    
+    def draw( self, screen ):
+        ## Draw the HUD.
+        screen.blit( self.image, ( 0,0 ) )
+        pygame.display.flip()
+
+class Pause( GameMode ):
+    def __init__( self ):
+        ## Initialize the superclass.
+        GameMode.__init__( self )
+        
+        self.image, _ = load_image( 'Pause.jpg' )
+        self.start_rect = pygame.Rect( 23, 70, 150, 110 )
+        
+        self.mouse_down_pos = (-1,-1)
+    
+    def enter(self):
+        pass
+        
+    def exit(self):
+        pass
+    
+    def mouse_button_down( self, event ):
+        self.mouse_down_pos = event.pos
+    
+    def mouse_button_up( self, event ):
+        
+        global lastMode
+        
+        def collides_down_and_up( r ):
+            return r.collidepoint( self.mouse_down_pos ) and r.collidepoint( event.pos )
+        
+        if collides_down_and_up( self.start_rect ):
+            print 'play!'
+            self.switch_to_mode( lastMode )
+    
+    def draw( self, screen ):
+        ## Draw the HUD.
+        screen.blit( self.image, ( 0,0 ) )
+        pygame.display.flip()
+
 
 class Hotspot():
     def __init__(self, rect, sound, name):
@@ -100,6 +193,9 @@ class Room( GameMode ):
         self.mouse_down_pos = (-1,-1)
         
     def _changeRoom(self, target):
+        
+        global lastMode
+        lastMode = 'Room'
         
         if target is 'Bedroom':
             self.roomName = 'Bedroom'
@@ -263,6 +359,10 @@ class Room( GameMode ):
         
         pygame.display.flip()
         
+    def key_down(self,event):
+        if event.key == K_ESCAPE:
+            self.switch_to_mode('Pause')
+        
 
 """       
 class Item():
@@ -315,6 +415,17 @@ def main():
     ### Set up the modes.
     modes = ModeManager()
     
+    
+    ### Set up Splash Screen
+    image, _ = load_image( 'Splash.jpg' )
+    modes.register_mode('SplashScreen',Cutscene(image,load_sound('None'),3000,'MainMenu'))
+    
+    ### Set up Main Menu
+    modes.register_mode('MainMenu', MainMenu())
+    
+    ### Set up Pause Screen
+    modes.register_mode('Pause', Pause())
+    
     ## Set up intro cutscene modes.
     image, _ = load_image( 'BlackScreen.png' )
     sound = load_sound('MichelleIntro.wav')
@@ -338,8 +449,8 @@ def main():
     
     modes.register_mode('Room', Room())
     
-    ## Start with Intro
-    modes.switch_to_mode( 'Room' )
+    ## Start with Splash
+    modes.switch_to_mode( 'SplashScreen' )
     
     
     ### The main loop.

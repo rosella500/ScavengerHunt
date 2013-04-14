@@ -7,3 +7,9 @@ Hotspots are also handled in the mouse_button_up() handler because they can have
 To play the game, you just have to click on things. The arrows will lead you from room to room while certain hotspots in each area will also affect things, so click whatever looks interesting. I recommend the cookie. Cookies are delicious.
 
 Also, my design has not changed much from the original design document. The prototype is obviously a small porion of the game with limited puzzles, limited interactivity, and limited tools to build an ambiance, but I think it still holds up well. The main change I made was that I'm relying more on global flags and have disabled the inventory for now. If I end up working more on this game for the final project, I'm sure the inventory will come back, if only for puzzle variety.
+
+Music Credits:
+
+Main Menu:
+Eternal Memory - MoVoX
+Distributed under the Creative Commons License (http://creativecommons.org/licenses/by/3.0/)

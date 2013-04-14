@@ -1,0 +1,47 @@
+Saving- pickling
+subtitles
+history log
+Probably no inventory; show icon for aquired knowledge; can look at current note
+Reverse note reading with echo lightly playing in background
+Note archive
+Content
+puzzle ideas
+audio stop code
+code refactoring; modular levels
+main menu - save, load, options(subtitles,music?????,sounds,resolution, fullscreen), new game, credits
+
+Kelsey - project manager\assets
+Tom - Lead programmer
+Mohammad - level designer\assistant programmer
+Victor - puzzle design\assistant programmer
+
+
+Story ideas:
+Caroline loves herself because no one loved her
+Learn more about Caroline; shock factor
+Cleaning attic = sorting mental issues
+Attic = ending?
+Drug abuse
+Scars\injuries when looking at clues\notes; see image of Caroline hurting herself and then revealing scars on same area on Michelle near the end
+Caroline = depressed child; manifests as anger to other classmates
+Caroline beats up classmate and parents get called in; they get in a car accident on the way
+Use kids drawings for intro: met each other on dating site
+Caroline gets put into foster home
+Michelle and Caroline both get in trouble for the fight
+Michelle became friends with caroline when she beat up bullies
+Michelle found out Caroline got put into foster care via internet message
+
+Note revelations:
+Same school
+Blame for parents' death
+Drug use
+Self harm
+
+Github
+Blogspot
+
+Development plan:
+Week 1: Refactor code; start getting images
+Week 2: Main menu
+Week 3: Saving
+Week 4: Options
