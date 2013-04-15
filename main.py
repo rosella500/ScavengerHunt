@@ -1,6 +1,7 @@
 #!/opt/local/bin/python2.7
 
 import os, pygame, json
+import pickle
 from pygame.locals import *
 from utils import *
 from modes import ModeManager, GameMode, SimpleMode
@@ -9,8 +10,12 @@ kDataDir = 'data'
 kGlobals = 'globals.json'
 globals = ''
 
-##Keep track of last gameMode (room)
+##Keep track of last gameMode for pausing
 global lastMode
+##Keep track of last room for saving
+global lastRoom
+##
+global globalSaveFile
 
 class Cutscene(GameMode):
     def __init__( self, image, sound, duration_in_milliseconds, next_mode_name ):
@@ -79,6 +84,9 @@ class MainMenu( GameMode ):
         GameMode.__init__( self )
         
         self.image, _ = load_image( 'MainMenu.jpg' )
+        
+        global lastRoom
+        global globalSaveFile
         ##load and play music
         try:
             backgroundMusic = os.path.join(kDataDir,'Eternal Memory.ogg')
@@ -86,7 +94,8 @@ class MainMenu( GameMode ):
         except pygame.error, message:
             print 'Cannot load music:'
             raise SystemExit, message
-        self.start_rect = pygame.Rect( 12, 81, 173, 111 )
+        self.start_rect = pygame.Rect( 13, 77, 159, 36 )
+        self.open_rect = pygame.Rect(8,123,171,32)
         
         self.mouse_down_pos = (-1,-1)
     
@@ -109,6 +118,13 @@ class MainMenu( GameMode ):
         if collides_down_and_up( self.start_rect ):
             print 'play!'
             self.switch_to_mode( 'Intro' )
+        elif collides_down_and_up(self.open_rect):
+            saveFile = open('save1.pkl','rb')
+            globalSaveFile = pickle.load(saveFile)
+            lastRoom = pickle.load(saveFile)
+            saveFile.close()
+            print("Loaded")
+            self.switch_to_mode('Room')
     
     def draw( self, screen ):
         ## Draw the HUD.
@@ -116,12 +132,14 @@ class MainMenu( GameMode ):
         pygame.display.flip()
 
 class Pause( GameMode ):
-    def __init__( self ):
+    def __init__( self):
         ## Initialize the superclass.
         GameMode.__init__( self )
         
         self.image, _ = load_image( 'Pause.jpg' )
-        self.start_rect = pygame.Rect( 23, 70, 150, 110 )
+        self.start_rect = pygame.Rect( 25, 75, 123, 32 )
+        self.save_rect = pygame.Rect(45,120,79,30)
+        self.load_rect = pygame.Rect(34,158,95,30)
         
         self.mouse_down_pos = (-1,-1)
     
@@ -137,6 +155,8 @@ class Pause( GameMode ):
     def mouse_button_up( self, event ):
         
         global lastMode
+        global lastRoom
+        global globalSaveFile
         
         def collides_down_and_up( r ):
             return r.collidepoint( self.mouse_down_pos ) and r.collidepoint( event.pos )
@@ -144,6 +164,19 @@ class Pause( GameMode ):
         if collides_down_and_up( self.start_rect ):
             print 'play!'
             self.switch_to_mode( lastMode )
+        elif collides_down_and_up(self.save_rect):
+            output = open('save1.pkl','wb')
+            pickle.dump(globalSaveFile,output)
+            pickle.dump(lastRoom,output)
+            output.close()
+            print("Saved")
+        elif collides_down_and_up(self.load_rect):
+            saveFile = open('save1.pkl','rb')
+            globalSaveFile = pickle.load(saveFile)
+            lastRoom = pickle.load(saveFile)
+            saveFile.close()
+            print("Loaded")
+            self.switch_to_mode('Room')
     
     def draw( self, screen ):
         ## Draw the HUD.
@@ -173,9 +206,6 @@ class Room( GameMode ):
     def __init__(self):
         GameMode.__init__(self)
         
-        self.globals = json.load( open( os.path.join( kDataDir, kGlobals ) ) )
-        
-        
         ##Initialize to bedroom
         self.roomName = ''
         self.image = None
@@ -192,10 +222,19 @@ class Room( GameMode ):
         
         self.mouse_down_pos = (-1,-1)
         
+    def enter(self):
+        global lastRoom
+        print "LastRoomSaved:"
+        print lastRoom
+        self._changeRoom(lastRoom)
+    
     def _changeRoom(self, target):
         
         global lastMode
+        global lastRoom
+        global globalSaveFile
         lastMode = 'Room'
+        lastRoom = target
         
         if target is 'Bedroom':
             self.roomName = 'Bedroom'
@@ -213,7 +252,7 @@ class Room( GameMode ):
             self.exits.append(Exit(pygame.Rect(0, 200, 70, 90), 'Garage'))
             self.exits.append(Exit(pygame.Rect(245, 190, 85, 55), 'Spices'))
             
-            if self.globals['cookieEaten'] is 0:
+            if globalSaveFile['cookieEaten'] is 0:
                 self.image, _  = load_image('Kitchen.jpg')
                 self.hotspots.append(Hotspot(pygame.Rect(210, 301, 22, 11), load_sound('cookie.wav'), "cookie"))
             else:
@@ -240,7 +279,7 @@ class Room( GameMode ):
             self.hotspots = []
             self.exits = []
             self.exits.append(Exit(pygame.Rect(525, 0, 145, 500), 'Kitchen'))
-            if self.globals['atticLocked'] is 1:
+            if globalSaveFile['atticLocked'] is 1:
                 self.image, _ = load_image('LockedAttic.jpg')
                 self.exits.append(Exit(pygame.Rect(295, 80, 20, 30), 'Lock'))
             else:
@@ -251,7 +290,7 @@ class Room( GameMode ):
             self.roomName = 'Lock'
             self.image, _ = load_image('Lock.jpg')
             self.hotspots = []
-            if self.globals['haveCombination'] is 0:
+            if globalSaveFile['haveCombination'] is 0:
                 sound = load_sound('LockedLock.wav')
             else:
                 sound = load_sound('OpenLock.wav')
@@ -264,7 +303,7 @@ class Room( GameMode ):
             self.hotspots = []
             self.exits = []
             self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Garage'))
-            if self.globals['atticDark'] is 1:
+            if self.globalSaveFile['atticDark'] is 1:
                 self.image, _ = load_image('DarkAttic.jpg')
                 self.hotspots.append(Hotspot(pygame.Rect(340, 245, 35, 35), load_sound('None'), "switch"))
             else:
@@ -303,18 +342,18 @@ class Room( GameMode ):
                 hotspot.sound.play()
                 
                 if self.roomName is 'Kitchen' and hotspot.name is 'cookie':
-                    self.globals['cookieEaten'] = 1
+                    globalSaveFile['cookieEaten'] = 1
                     self._changeRoom('Kitchen')
                 elif self.roomName is 'Spices' and hotspot.name is 'pepper':
                     self._changeRoom('Pepper')
                 elif self.roomName is 'Pepper' and hotspot.name is 'combination':
-                    self.globals['haveCombination'] = 1
+                    globalSaveFile['haveCombination'] = 1
                     ##self._changeRoom('Kitchen')
                 elif self.roomName is 'Attic' and hotspot.name is 'switch':
-                    self.globals['atticDark'] = 0
+                    globalSaveFile['atticDark'] = 0
                     self._changeRoom('Attic')
-                elif self.roomName is 'Lock' and hotspot.name is 'lock' and self.globals['haveCombination'] is 1:
-                    self.globals['atticLocked'] = 0
+                elif self.roomName is 'Lock' and hotspot.name is 'lock' and globalSaveFile['haveCombination'] is 1:
+                    globalSaveFile['atticLocked'] = 0
                     self._changeRoom('Garage')
                 elif self.roomName is 'CloseUpBox' and hotspot.name is 'box':
                     self.switch_to_mode('End')
@@ -402,13 +441,14 @@ class Inventory():
         
 def main():
     ### Load global variables.
-    globals = json.load( open( os.path.join( kDataDir, kGlobals ) ) )
+    global globalSaveFile
+    globalSaveFile = json.load( open( os.path.join( kDataDir, kGlobals ) ) )
     
     
     ### Initialize pygame.
     pygame.init()
-    screen = pygame.display.set_mode( globals['screen_size'] )
-    pygame.display.set_caption( globals['window_title'] )
+    screen = pygame.display.set_mode( globalSaveFile['screen_size'] )
+    pygame.display.set_caption( globalSaveFile['window_title'] )
     clock = pygame.time.Clock()
     
     
@@ -454,7 +494,7 @@ def main():
     
     
     ### The main loop.
-    fps = globals['fps']
+    fps = globalSaveFile['fps']
     while not modes.quitting():
         clock.tick( fps )
         
