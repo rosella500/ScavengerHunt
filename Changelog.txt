@@ -1,8 +1,3 @@
-Version 0.25a
-04/14/2013
-11:52 PM
-Attempted to save and load via pickling (not working yet)
-
 Version 0.2a
 04/14/2013
 2:47 PM
