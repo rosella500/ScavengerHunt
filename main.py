@@ -1,6 +1,6 @@
 #!/opt/local/bin/python2.7
 
-import os, pygame, json
+import os, pygame, json, csv
 from pygame.locals import *
 from utils import *
 from modes import ModeManager, GameMode, SimpleMode
@@ -174,8 +174,7 @@ class Room( GameMode ):
         GameMode.__init__(self)
         
         self.globals = json.load( open( os.path.join( kDataDir, kGlobals ) ) )
-        
-        
+
         ##Initialize to bedroom
         self.roomName = ''
         self.image = None
@@ -197,49 +196,52 @@ class Room( GameMode ):
         global lastMode
         lastMode = 'Room'
         
-        if target is 'Bedroom':
-            self.roomName = 'Bedroom'
-            self.image, _ = load_image('NotePillow.jpg')
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(0,0,150,500), 'Kitchen'))
-            self.hotspots.append(Hotspot(pygame.Rect(265, 235, 90, 85), load_sound('MichelleNote.wav'), "note"))
-            
-        elif target is 'Kitchen':
-            self.roomName = 'Kitchen'
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Bedroom'))
-            self.exits.append(Exit(pygame.Rect(0, 200, 70, 90), 'Garage'))
-            self.exits.append(Exit(pygame.Rect(245, 190, 85, 55), 'Spices'))
-            
+        print "switching to " + target
+        
+        with open('Rooms.csv', 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+            for row in reader:
+                if row[0] == target:
+                    print "Found "+ target
+                    self.roomName = row[0].strip()
+                    self.image, _ = load_image(row[1].strip())
+                    self.hotspots = []
+                    self.exits = []
+                    hotspots = row[2].split(";")
+                    hotspots = hotspots[:-1] ##If all rows end in a semi-colon, there will be an extra hotspot with no data
+                    for spot in hotspots:
+                        info = spot.split(",")
+                        name = info[0].strip()
+                        sound = info[1].strip()
+                        x = int(info[2])
+                        y = int(info[3])
+                        width = int(info[4])
+                        height = int(info[5])
+                        self.hotspots.append(Hotspot(pygame.Rect(x,y,width,height), load_sound(sound), name))
+                    
+                    exits = row[3].split(";")
+                    exits = exits[:-1] ##If all rows end in a semi-colon, there will be an extra exit with no data
+                    for exit in exits:
+                        info = exit.split(",")
+                        name = info[0].strip()
+                        x = int(info[1])
+                        y = int(info[2])
+                        width = int(info[3])
+                        height = int(info[4])
+                        self.exits.append(Exit(pygame.Rect(x,y,width,height), name))
+                        
+        
+        ## Add special cases to rooms
+        if target == 'Kitchen':
+            print "Target is Kitchen"
+            print self.globals['cookieEaten']
             if self.globals['cookieEaten'] is 0:
                 self.image, _  = load_image('Kitchen.jpg')
                 self.hotspots.append(Hotspot(pygame.Rect(210, 301, 22, 11), load_sound('cookie.wav'), "cookie"))
             else:
                 self.image, _ = load_image('KitchenSansCookie.jpg')
            
-        elif target is 'Spices':
-            self.roomName = 'Spices'
-            self.image, _ = load_image('PepperCloseUp.jpg')
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Kitchen'))
-            self.hotspots.append(Hotspot(pygame.Rect(100,85,125,335), load_sound('PepperOpen.wav'), "pepper"))
-            
-        elif target is 'Pepper':
-            self.roomName = 'Pepper'
-            self.image, _ = load_image('PepperNote.jpg')
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Kitchen'))
-            self.hotspots.append(Hotspot(pygame.Rect(200,245,100,85), load_sound('ReadCombination.wav'), "combination"))
-            
-        elif target is 'Garage':
-            self.roomName = 'Garage'
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(525, 0, 145, 500), 'Kitchen'))
+        elif target == 'Garage':
             if self.globals['atticLocked'] is 1:
                 self.image, _ = load_image('LockedAttic.jpg')
                 self.exits.append(Exit(pygame.Rect(295, 80, 20, 30), 'Lock'))
@@ -247,44 +249,23 @@ class Room( GameMode ):
                 self.image, _ = load_image('OpenAttic.jpg')
                 self.exits.append(Exit(pygame.Rect(200,0,220,500), 'Attic'))
             
-        elif target is 'Lock':
-            self.roomName = 'Lock'
-            self.image, _ = load_image('Lock.jpg')
-            self.hotspots = []
+        elif target == 'Lock':
             if self.globals['haveCombination'] is 0:
                 sound = load_sound('LockedLock.wav')
             else:
                 sound = load_sound('OpenLock.wav')
             self.hotspots.append(Hotspot(pygame.Rect(205,20,240,330), sound, "lock"))
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Garage'))
             
-        elif target is 'Attic':
-            self.roomName = 'Attic'
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(300, 430, 90, 70), 'Garage'))
+        elif target == 'Attic':
             if self.globals['atticDark'] is 1:
-                self.image, _ = load_image('DarkAttic.jpg')
                 self.hotspots.append(Hotspot(pygame.Rect(340, 245, 35, 35), load_sound('None'), "switch"))
             else:
                 self.image, _ = load_image('LightAttic.jpg')
                 self.exits.append(Exit(pygame.Rect(600, 200, 70, 90), 'Box'))
-                
-        elif target is 'Box':
-            self.roomName = 'Box'
-            self.image, _ = load_image('Box.jpg')
-            self.hotspots = []
-            self.exits = []
-            self.exits.append(Exit(pygame.Rect(0, 200, 70, 90), 'Attic'))
-            self.exits.append(Exit(pygame.Rect(110,65,560,435), 'CloseUpBox'))
-            
-        elif target is 'CloseUpBox':
-            self.roomName = 'CloseUpBox'
-            self.image, _ = load_image('CloseUpBox.jpg')
-            self.hotspots = []
-            self.hotspots.append(Hotspot(pygame.Rect(0,0,670,500), load_sound('BoxOpen.wav'), 'box'))
-            self.exits = []
+
+        
+        
+  
             
         
     def mouse_button_down( self, event ):
@@ -302,21 +283,21 @@ class Room( GameMode ):
             if collides_down_and_up( hotspot.rect):
                 hotspot.sound.play()
                 
-                if self.roomName is 'Kitchen' and hotspot.name is 'cookie':
+                if self.roomName == 'Kitchen' and hotspot.name == 'cookie':
                     self.globals['cookieEaten'] = 1
                     self._changeRoom('Kitchen')
-                elif self.roomName is 'Spices' and hotspot.name is 'pepper':
+                elif self.roomName == 'Spices' and hotspot.name == 'pepper':
                     self._changeRoom('Pepper')
-                elif self.roomName is 'Pepper' and hotspot.name is 'combination':
+                elif self.roomName == 'Pepper' and hotspot.name == 'combination':
                     self.globals['haveCombination'] = 1
                     ##self._changeRoom('Kitchen')
-                elif self.roomName is 'Attic' and hotspot.name is 'switch':
+                elif self.roomName == 'Attic' and hotspot.name == 'switch':
                     self.globals['atticDark'] = 0
                     self._changeRoom('Attic')
-                elif self.roomName is 'Lock' and hotspot.name is 'lock' and self.globals['haveCombination'] is 1:
+                elif self.roomName == 'Lock' and hotspot.name == 'lock' and self.globals['haveCombination'] is 1:
                     self.globals['atticLocked'] = 0
                     self._changeRoom('Garage')
-                elif self.roomName is 'CloseUpBox' and hotspot.name is 'box':
+                elif self.roomName == 'CloseUpBox' and hotspot.name == 'box':
                     self.switch_to_mode('End')
                 print hotspot.name
                 

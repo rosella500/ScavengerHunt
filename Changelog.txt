@@ -1,3 +1,9 @@
+Version 0.3a
+04/25/2013
+7:01 PM
+Implemented room changing via CSV
+Fixed a bug causing the game to crash when it interacted with a NoneSound
+
 Version 0.2a
 04/14/2013
 2:47 PM

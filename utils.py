@@ -47,6 +47,7 @@ def load_sound( name ):
     
     class NoneSound:
         def play( self ): pass
+        def stop( self ): pass
     if not pygame.mixer or not pygame.mixer.get_init() or name is 'None':
         return NoneSound()
     
