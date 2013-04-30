@@ -132,76 +132,7 @@ class MainMenu( GameMode ):
         screen.blit( self.image, ( 0,0 ) )
         pygame.display.flip()
 
-class Pause( GameMode ):
-    def __init__( self ):
-        ## Initialize the superclass.
-        GameMode.__init__( self )
-        
-        self.image, _ = load_image( 'Pause.jpg' )
-        self.start_rect = pygame.Rect( 25, 75, 123, 32 )
-        
-        self.mouse_down_pos = (-1,-1)
-    
-    def enter(self):
-        pass
-        
-    def exit(self):
-        pass
-    
-    def mouse_button_down( self, event ):
-        self.mouse_down_pos = event.pos
-    
-    def mouse_button_up( self, event ):
-        
-        global lastMode
-        
-        def collides_down_and_up( r ):
-            return r.collidepoint( self.mouse_down_pos ) and r.collidepoint( event.pos )
-        
-        if collides_down_and_up( self.start_rect ):
-            print 'play!'
-            self.switch_to_mode( lastMode )
-    
-    def draw( self, screen ):
-        ## Draw the HUD.
-        screen.blit( self.image, ( 0,0 ) )
-        pygame.display.flip()
-
-"""       
-class Item():
-    def __init__(self, name, onScreen, inInven, desc):
-        self.name = name
-        self.onScreenImage, _ = load_image(onScreen)
-        self.inInvenImage, _ = load_image(inInven)
-        self.desc = desc;
-        
-        self.onScreen = 1
-        self.inInven = 0;
-        
-class Inventory():
-    def __init__(self):
-        self.dict = {}
-        self.current = None
-        self.listOfAllObjects = []
-        
-    def select(self, name):
-        self.current = self.dict[name]
-    
-    def add(self, object):
-        self.dict[object.name] = object
-        self.listOfAllObjects.append(object.name)
-        
-    def remove(self, name):
-        self.dict.remove(name)
-        self.current = None;
-    
-    def hasEverHad(self, name):
-        if self.listOfAllObjects.count(name) > 0:
-            return True;
-        else:
-            return False;
-       
- """     
+  
         
 def main():
     ### Load global variables.
@@ -226,8 +157,6 @@ def main():
     ### Set up Main Menu
     modes.register_mode('MainMenu', MainMenu())
     
-    ### Set up Pause Screen
-    modes.register_mode('Pause', Pause())
     
     ## Set up intro cutscene modes.
     image, _ = load_image( 'BlackScreen.png' )
