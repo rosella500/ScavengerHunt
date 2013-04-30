@@ -1,3 +1,10 @@
+Version 0.4a
+04/30/2013
+12:12 AM
+Implemented modularized code
+Used new pause menu with current note playback
+Bugs: both lock sounds will play when lock is unlocked
+
 Version 0.3a
 04/25/2013
 7:01 PM

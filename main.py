@@ -1,6 +1,12 @@
 #!/opt/local/bin/python2.7
 
 import os, pygame, json, csv
+from cutscene import *
+from hotspot import *
+from exit_class import *
+from object_class import *
+from room import *
+from pause_menu import *
 from pygame.locals import *
 from utils import *
 from modes import ModeManager, GameMode, SimpleMode
@@ -86,7 +92,7 @@ class MainMenu( GameMode ):
         except pygame.error, message:
             print 'Cannot load music:'
             raise SystemExit, message
-        self.start_rect = pygame.Rect( 12, 81, 173, 111 )
+        self.start_rect = pygame.Rect( 13, 77, 159, 36 )
         
         self.mouse_down_pos = (-1,-1)
     
@@ -121,7 +127,7 @@ class Pause( GameMode ):
         GameMode.__init__( self )
         
         self.image, _ = load_image( 'Pause.jpg' )
-        self.start_rect = pygame.Rect( 23, 70, 150, 110 )
+        self.start_rect = pygame.Rect( 25, 75, 123, 32 )
         
         self.mouse_down_pos = (-1,-1)
     
@@ -150,7 +156,7 @@ class Pause( GameMode ):
         screen.blit( self.image, ( 0,0 ) )
         pygame.display.flip()
 
-
+"""
 class Hotspot():
     def __init__(self, rect, sound, name):
         self.rect = rect
@@ -165,10 +171,8 @@ class Object():
     def __init__(self, rect, item):
         self.rect = rect;
         self.item = item;
-        
-
-        
-
+"""
+"""        
 class Room( GameMode ):
     def __init__(self):
         GameMode.__init__(self)
@@ -183,11 +187,10 @@ class Room( GameMode ):
         #self.objects = []
         
         self._changeRoom('Bedroom')
-        
-        """    
+            
         self.inventory = Inventory()
         self.message = ""
-        """
+
         
         self.mouse_down_pos = (-1,-1)
         
@@ -306,7 +309,7 @@ class Room( GameMode ):
                 self._changeRoom(exit.target)
                 print 'Change room'
          
-        """         
+
         for object in self.objects:
             if collides_down_and_up( object.rect ):
                 print 'Pick up object'
@@ -314,13 +317,13 @@ class Room( GameMode ):
                 self.inventory.add(object.item)
                 self.inventory.select(object.item.name)
                 self.message = object.item.desc
-        """
+
     
     def draw( self, screen ):
         screen.fill( ( 255,255,255) )
         screen.blit( self.image, ( 0,0 ) )
         
-        """
+
         if pygame.font:
             font = pygame.font.Font( None, 24 )
             text = font.render( self.message, 1, ( 10, 10, 10 ) )
@@ -336,14 +339,14 @@ class Room( GameMode ):
         ## Display Inventory
         if self.inventory.current is not None:
             screen.blit(self.inventory.current.inInvenImage, self.inventory.current.inInvenImage.get_rect(top = 575))
-        """   
+
         
         pygame.display.flip()
         
     def key_down(self,event):
         if event.key == K_ESCAPE:
             self.switch_to_mode('Pause')
-        
+"""        
 
 """       
 class Item():
@@ -425,13 +428,19 @@ def main():
     image, _ = load_image( 'Note.jpg' )
     sound = load_sound('CarolineNote.wav')
     modes.register_mode( 'Note', Cutscene(image, sound, 22000, 'Room' ) )
-    
-    
-    
-    modes.register_mode('Room', Room())
+
+
+    pause_menu = PauseMenu()
+    modes.register_mode('PauseMenu', pause_menu)
+
+
+    room = Room()
+    modes.register_mode('Room', room)
     
     ## Start with Splash
     modes.switch_to_mode( 'SplashScreen' )
+
+    pause = False
     
     
     ### The main loop.
@@ -447,6 +456,24 @@ def main():
                 break
             
             elif event.type == KEYDOWN:
+                key = pygame.key.get_pressed()
+                #print(key)#test
+                if key[K_ESCAPE]:
+                    if pause == True:
+                        modes.switch_to_mode( 'Room' )
+                        pause = False
+                        print("game unpaused")
+                    elif pause == False:
+                        #need some function to update the current note
+                        #pause_menu.someMethod()
+                        ##pause_menu.update_current_note(room.globals['current_note'])
+                        modes.switch_to_mode( 'PauseMenu' )
+                        pause = True
+                        print("game paused")
+                    else:
+                        print("ERROR:  pause variable is not FALSE nor TRUE")
+                else:
+                    print("some key pressed")
                 modes.current_mode.key_down( event )
             
             elif event.type == KEYUP:
