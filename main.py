@@ -15,6 +15,12 @@ kDataDir = 'data'
 kGlobals = 'globals.json'
 globals = ''
 
+#used to prevent from pausing during splashscreen or main menu
+global splash_bool
+splash_bool = True
+global main_menu_bool
+main_menu_bool = False
+
 ##Keep track of last gameMode (room)
 global lastMode
 
@@ -83,12 +89,15 @@ class MainMenu( GameMode ):
     def __init__( self ):
         ## Initialize the superclass.
         GameMode.__init__( self )
-        
         self.image, _ = load_image( 'MainMenu.jpg' )
         ##load and play music
         try:
             backgroundMusic = os.path.join(kDataDir,'Eternal Memory.ogg')
             pygame.mixer.music.load( backgroundMusic )
+            global splash_bool
+            splash_bool = False
+            global main_menu_bool
+            main_menu_bool = True
         except pygame.error, message:
             print 'Cannot load music:'
             raise SystemExit, message
@@ -114,6 +123,8 @@ class MainMenu( GameMode ):
         
         if collides_down_and_up( self.start_rect ):
             print 'play!'
+            global main_menu_bool
+            main_menu_bool = False
             self.switch_to_mode( 'Intro' )
     
     def draw( self, screen ):
@@ -442,7 +453,6 @@ def main():
 
     pause = False
     
-    
     ### The main loop.
     fps = globals['fps']
     while not modes.quitting():
@@ -458,7 +468,9 @@ def main():
             elif event.type == KEYDOWN:
                 key = pygame.key.get_pressed()
                 #print(key)#test
-                if key[K_ESCAPE]:
+                global splash_bool
+                global main_menu_bool
+                if (key[K_ESCAPE] or key[K_p]) and (splash_bool == False and main_menu_bool == False):
                     if pause == True:
                         modes.switch_to_mode( 'Room' )
                         pause = False
