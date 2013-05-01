@@ -1,10 +1,41 @@
 roomName,image,hotspots,exits
-Bedroom,NotePillow.jpg,"note, MichelleNote.wav, 265, 235, 90, 85;","Kitchen, 0,0,150,500;"
-Kitchen,Kitchen.jpg,,"Bedroom, 300, 430, 90, 70; Garage, 0, 200, 70, 90; Spices, 245, 190, 85, 55;"
+Bedroom,Bedroom.jpg,,"AngledBed, 250,216,420,283;"
+Kitchen,Kitchen.jpg,"cookies, cookie,wav, 208,294,23,21;","Garage, 0, 200, 70, 90; Spices, 245, 190, 85, 55;"
 Spices,PepperCloseUp.jpg,"pepper, PepperOpen.wav ,100,85,125,335;","Kitchen, 300, 430, 90, 70; Pepper, 100,85,125,335;"
-Pepper,PepperNote.jpg,"combination, ReadCombination.wav, 200,245,100,85;","Kitchen, 300, 430, 90, 70;"
+Pepper,PepperNote.jpg,"noteToToy, paperOpening.wav, 200,245,100,85;","Kitchen, 300, 430, 90, 70;"
+BedTV,BedroomTV.jpg,,"Stereo, 371,189,119,130; Plant, 436,315,88,101;"
+Stereo,CloseUpStereo.jpg,,"MixTape, 171,109,110,130;"
+MixTape,MixTape.jpg,,"MixTapeNote, 183,115,382,244;"
+MixTapeNote,MixTapeNote.jpg,"noteToYearbook, paperOpening.wav, 341,99,129,301;",
+Plant,Plant.jpg,,"PlantBase, 265,323,104,132;"
+PlantBase,PlantBase.jpg,,"PlantEmpty, 180,182,288,246;"
+PlantEmpty,PlantEmptyPot.jpg,,"Drugs, 145,148,339,148;"
+Drugs,Drugs.jpg,"flashback, none.wav, 78,20,529,451;",
+Newspaper,Newspaper.jpg,,"Obituaries, 228,259,172,123;"
+Obituaries,Obituaries.jpg,"pyschodelic, none.wav, 60,46,610,454;",
+Combination,Combination.jpg,,
+Doors,Doors.jpg,,"ChildBedroom, 20,0,161,500; ComputerOff, 258,37,127,386; Bedroom, 477, 70, 150, 311;"
+Stairs,Stairs.jpg,,"Purse, 428,372,173,119;"
+ChildBedroom,ChildBedroom.jpg,,"CloseUpChildBed, 0,188,253,312; InCloset, 529,0,130,500; "
+CloseUpChildBed,CloseUpChildBed.jpg,,
+InCloset,InCloset.jpg,,"OpenToyWithNote, 121,155,417,278;"
+EmptyToyBox,EmptyToyBox.jpg,,"Yearbook, 151,158,256,280;"
+OpenToyWithNote,OpenToyWithNote.jpg,,
+OpenToySansNote,OpenToySansNote.jpg,,
+Yearbook,Yearbook.jpg,,"YearbookNotPictured, 416,278,250,215;"
+YearbookNotPictured,YearbookNotPictured.jpg,,
+BedWithCombination,BedWithCombination.jpg,,"Combination, 237,258,92,58;"
+LastPageYearBook,LastPageYearbook.jpg,"noteToParents, none.wav, 185,204,202,213;",
+ComputerOn,ComputerOn.jpg,,"Desktop, 101,112,317,360;"
+Desktop,Desktop.bmp,,"Inbox, 8,228,67,67;"
+Email,Email.bmp,,
+Drafts,Drafts.bmp,"email, none.wav, 431,222,226,20;","Email, 431,222,226,20;"
+Inbox,Inbox.bmp,,"Drafts, 15,303,58,16;"
+ComputerOff,ComputerOff.jpg,,"Desktop, 101,112,317,360;"
 Garage,LockedAttic.jpg,,"Kitchen, 525, 0, 145, 500;"
 Lock,Lock.jpg,"lock, LockedLock.wav, 205,20,240,330;","Garage, 300, 430, 90, 70;"
 Attic,DarkAttic.jpg,,"Garage, 300, 430, 90, 70;"
 Box,Box.jpg,,"Attic, 0, 200, 70, 90; CloseUpBox, 110,65,560,435;"
 CloseUpBox,CloseUpBox.jpg,"box, BoxOpen.wav, 0,0,670,500;",
+PurseNote,PurseNote.jpg,"noteToDrugs, paperOpening.wav, 184,48,252,277;",
+AngledBed,AngledBed.jpg,,
