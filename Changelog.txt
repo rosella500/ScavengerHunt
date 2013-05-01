@@ -1,3 +1,9 @@
+Version 0.7b
+05/01/2013
+3:15 AM
+Added in all rooms and hotspots with corresponding changes to rooms.csv
+Fixed pause menu bugs
+
 Version 0.4a
 04/30/2013
 12:12 AM
