@@ -1,3 +1,9 @@
+Version 0.95b
+05/02/2013
+4:05 AM
+Added skeleton final cutscene
+Added Powerpoint presentation
+
 Version 0.91b
 05/02/2013
 2:54 AM
