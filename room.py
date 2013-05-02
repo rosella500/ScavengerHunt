@@ -85,7 +85,34 @@ class Room( GameMode ):
                 self.hotspots.append(Hotspot(pygame.Rect(210, 301, 22, 11), load_sound('cookie.wav'), "cookie"))
             else:
                 self.image, _ = load_image('KitchenSansCookie.jpg')
-           
+
+        elif target == 'InCloset':
+            if self.globals['checkToyChest'] == 1:
+                self.exits.append(Exit(pygame.Rect(121, 155, 417, 278), 'OpenToyWithNote'))
+            if self.globals['checkYearbook'] == 1:
+                self.exits.append(Exit(pygame.Rect(121, 155, 417, 278), 'OpenToySansNote'))
+
+        elif target == 'ComputerOff':
+            if self.globals['computerOn'] == 1:
+                self.image, _ = load_image('computerOn.jpg')
+
+        elif target == 'Desktop':
+            if self.globals['checkComputer'] == 1:
+                self.exits.append(Exit(pygame.Rect(8, 228, 67, 67), 'Inbox'))
+
+        elif target == 'Stereo':
+            if self.globals['checkMixtape'] == 1:
+                self.exits.append(Exit(pygame.Rect(171,109,110,130), 'MixTape'))
+
+        elif target == 'OpenToySansNote':
+            if self.globals['checkYearbook'] == 1:
+                self.exits.append(Exit(pygame.Rect(30, 95, 613, 351), 'EmptyToyBox'))
+
+        elif target == 'Stairs':
+            if self.globals['checkParents'] == 1:
+                self.exits.append(Exit(pygame.Rect(428, 372, 173, 119), 'OpenPurse'))
+
+                
         elif target == 'Garage':
             if self.globals['atticLocked'] == 1:
                 self.image, _ = load_image('LockedAttic.jpg')
@@ -93,9 +120,16 @@ class Room( GameMode ):
             else:
                 self.image, _ = load_image('OpenAttic.jpg')
                 self.exits.append(Exit(pygame.Rect(200,0,220,500), 'Attic'))
+
+        elif target == 'Plant':
+            if self.globals['checkDrugs'] == 1:
+                self.exits.append(Exit(pygame.Rect(265, 323, 104, 132), 'PlantBase'))
+
+        elif target == 'Bathroom':
+            if self.globals['flashbacked'] == 1:
+                self.exits.append(Exit(pygame.Rect(48, 314, 148, 169), 'Sink'))
             
         elif target == 'Lock':
-            print self.globals['haveCombination']
             if self.globals['haveCombination'] == 0:
                 sound = load_sound('LockedLock.wav')
             else:
@@ -132,10 +166,24 @@ class Room( GameMode ):
                     self._changeRoom('Kitchen')
                 elif hotspot.name == 'pepper':
                     self._changeRoom('Pepper')
-                elif hotspot.name == 'combination':
+                elif hotspot.name == 'noteToToy':
+                    self.globals['checkToyChest'] = 1
+                elif hotspot.name == 'noteToComputer':
+                    self.globals['checkComputer'] = 1
+                elif hotspot.name == 'noteToMixtape':
+                    self.globals['computerOn'] = 1
+                    self.globals['checkMixtape'] = 1
+                elif hotspot.name == 'noteToYearbook':
+                    self.globals['checkYearbook'] = 1
+                elif hotspot.name == 'noteToParents':
+                    self.globals['checkParents'] = 1
+                elif hotspot.name == 'noteToDrugs':
+                    self.globals['checkDrugs'] = 1
+                elif hotspot.name == 'flashback':
+                    self.globals['flashbacked'] = 1
                     self.globals['haveCombination'] = 1
-                    print self.globals['haveCombination']
-                    ##self._changeRoom('Kitchen')
+                    self._changeRoom('Bedroom')
+                    self.switch_to_mode('CatchBreath')
                 elif hotspot.name == 'switch':
                     self.globals['atticDark'] = 0
                     self._changeRoom('Attic')

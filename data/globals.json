@@ -5,6 +5,14 @@
     "atticLocked": 1,
     "atticDark": 1,
     "cookieEaten": 0,
+	"checkToyChest": 0,
+	"checkComputer": 0,
+	"computerOn": 0,
+	"checkMixtape": 0,
+	"checkYearbook": 0,
+	"checkParents": 0,
+	"checkDrugs": 0,
+	"flashbacked": 0,
     "haveCombination": 0,
     "current_note": "MichelleNote.wav"
 
