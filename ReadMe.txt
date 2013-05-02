@@ -8,8 +8,13 @@ To play the game, you just have to click on things. The arrows will lead you fro
 
 Also, my design has not changed much from the original design document. The prototype is obviously a small porion of the game with limited puzzles, limited interactivity, and limited tools to build an ambiance, but I think it still holds up well. The main change I made was that I'm relying more on global flags and have disabled the inventory for now. If I end up working more on this game for the final project, I'm sure the inventory will come back, if only for puzzle variety.
 
-Music Credits:
+Credits:
 
 Main Menu:
 Eternal Memory - MoVoX
 Distributed under the Creative Commons License (http://creativecommons.org/licenses/by/3.0/)
+
+Footsteps sound effect: freesfx
+http://www.freesfx.co.uk
+
+Makeup: Robin Gardner

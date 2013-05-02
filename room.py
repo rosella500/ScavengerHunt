@@ -78,7 +78,6 @@ class Room( GameMode ):
         
         ## Add special cases to rooms
         if target == 'Kitchen':
-            print "Target is Kitchen"
             print self.globals['cookieEaten']
             if self.globals['cookieEaten'] == 0:
                 self.image, _  = load_image('Kitchen.jpg')
@@ -168,25 +167,30 @@ class Room( GameMode ):
                     self._changeRoom('Pepper')
                 elif hotspot.name == 'noteToToy':
                     self.globals['checkToyChest'] = 1
-                    self.globals['current_note'] = 'cookie.wav'
+                    self.globals['current_note'] = 'Note2.wav'
                 elif hotspot.name == 'noteToComputer':
+                    self.globals['checkToyChest'] = 0
                     self.globals['checkComputer'] = 1
-                    self.globals['current_note'] = 'cookie.wav'
+                    self.globals['current_note'] = 'Note3.wav'
                 elif hotspot.name == 'noteToMixtape':
+                    self.globals['checkComputer'] = 0
                     self.globals['computerOn'] = 1
                     self.globals['checkMixtape'] = 1
-                    self.globals['current_note'] = 'cookie.wav'
+                    self.globals['current_note'] = 'Note4.wav'
                 elif hotspot.name == 'noteToYearbook':
+                    self.globals['checkMixtape'] = 0
                     self.globals['checkYearbook'] = 1
-                    self.globals['current_note'] = 'cookie.wav'
+                    self.globals['current_note'] = 'Note5.wav'
                 elif hotspot.name == 'noteToParents':
+                    self.globals['checkYearbook'] = 0
                     self.globals['checkParents'] = 1
-                    self.globals['current_note'] = 'cookie.wav'
+                    self.globals['current_note'] = 'Note6.wav'
                 elif hotspot.name == 'noteToDrugs':
+                    self.globals['checkParents'] = 0
                     self.globals['checkDrugs'] = 1
-                    self.globals['current_note'] = 'cookie.wav'
+                    self.globals['current_note'] = 'Note7.wav'
                 elif hotspot.name == 'flashback':
-                    self.globals['current_note'] = 'ReadCombination.wav'
+                    self.globals['current_note'] = 'Combination.wav'
                     self.globals['flashbacked'] = 1
                     self.globals['haveCombination'] = 1
                     self._changeRoom('Bedroom')

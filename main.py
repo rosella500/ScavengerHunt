@@ -181,40 +181,40 @@ def main():
 
     ##Set up bathroom cutscene
     image, _ = load_image( 'BlackScreen.png' )
-    sound = load_sound('cookie.wav')
+    sound = load_sound('None')
     modes.register_mode( 'CatchBreath', Cutscene(image, sound, 1000, 'DoorsCutscene' ) )
     
     image, _ = load_image( 'Doors.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'DoorsCutscene', Cutscene(image, sound, 1000, 'StairsCutscene' ) )
+    sound = load_sound('AfterHallucination.wav')
+    modes.register_mode( 'DoorsCutscene', Cutscene(image, sound, 13000, 'StairsCutscene' ) )
     
     image, _ = load_image( 'Stairs.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'StairsCutscene', Cutscene(image, sound, 1000, 'BathroomCutscene' ) )
+    sound = load_sound('Stairs.wav')##Footsteps
+    modes.register_mode( 'StairsCutscene', Cutscene(image, sound, 2000, 'BathroomCutscene' ) )
     
     image, _ = load_image( 'Bathroom.jpg' )
-    sound = load_sound('cookie.wav')
+    sound = load_sound('None')
     modes.register_mode( 'BathroomCutscene', Cutscene(image, sound, 1000, 'SinkCutscene' ) )
 
     image, _ = load_image( 'Sink.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'SinkCutscene', Cutscene(image, sound, 1000, 'TrackmarksCutscene' ) )
+    sound = load_sound('Sink.wav')
+    modes.register_mode( 'SinkCutscene', Cutscene(image, sound, 2000, 'TrackmarksCutscene' ) )
 
     image, _ = load_image( 'TrackMarks.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'TrackmarksCutscene', Cutscene(image, sound, 1000, 'StairsCutscene2' ) )
+    sound = load_sound('TrackMarks.wav')
+    modes.register_mode( 'TrackmarksCutscene', Cutscene(image, sound, 14000, 'StairsCutscene2' ) )
 
     image, _ = load_image( 'Stairs.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'StairsCutscene2', Cutscene(image, sound, 1000, 'BedroomNote' ) )
+    sound = load_sound('Stairs.wav')##Footsteps
+    modes.register_mode( 'StairsCutscene2', Cutscene(image, sound, 2000, 'BedroomNote' ) )
 
     image, _ = load_image( 'BedWithCombination.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'BedroomNote', Cutscene(image, sound, 1000, 'CombinationCutscene' ) )
+    sound = load_sound('WhereCombination.wav')
+    modes.register_mode( 'BedroomNote', Cutscene(image, sound, 4000, 'CombinationCutscene' ) )
 
     image, _ = load_image( 'Combination.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode( 'CombinationCutscene', Cutscene(image, sound, 1000, 'Room' ) )
+    sound = load_sound('Combination.wav')
+    modes.register_mode( 'CombinationCutscene', Cutscene(image, sound, 3000, 'Room' ) )
 
     ##Set up ending cutscene
     image, _ = load_image( 'InsideBox.jpg' )
@@ -225,16 +225,16 @@ def main():
     modes.register_mode('EndLetter', Cutscene(image, sound, 2000, 'EndLetterOpen'))
 
     image, _ = load_image( 'AtticLetterOpen.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode('EndLetterOpen', Cutscene(image, sound, 5000, 'EndBoxBottom'))
+    sound = load_sound('EndAtticNote.wav')
+    modes.register_mode('EndLetterOpen', Cutscene(image, sound, 14000, 'EndBoxBottom'))
 
     image, _ = load_image( 'InsideBoxWithoutLetter.jpg' )
     sound = load_sound('PaperOpening.wav')
     modes.register_mode('EndBoxBottom', Cutscene(image, sound, 2000, 'EndFinal'))
 
     image, _ = load_image( 'FinalMirror.jpg' )
-    sound = load_sound('cookie.wav')
-    modes.register_mode('EndFinal', Cutscene(image, sound, 5000, 'MainMenu'))
+    sound = load_sound('End.wav')
+    modes.register_mode('EndFinal', Cutscene(image, sound, 10000, 'MainMenu'))
     
     pause_menu = PauseMenu()
     modes.register_mode('PauseMenu', pause_menu)
