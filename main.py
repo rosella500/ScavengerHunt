@@ -167,8 +167,6 @@ def main():
     sound = load_sound('MichelleIntro.wav')
     modes.register_mode( 'Intro', Cutscene(image, sound, 21000, 'Sleep' ) )
     
-    modes.register_mode('End', Cutscene(image, load_sound('None'), 5000, 'End'))
-    
     image, _ = load_image( 'WakeUp.jpg' )
     sound = load_sound('AhGloriousSleep.wav')
     modes.register_mode( 'Sleep', Cutscene(image, sound, 8000, 'Huh' ) )
@@ -217,6 +215,26 @@ def main():
     image, _ = load_image( 'Combination.jpg' )
     sound = load_sound('cookie.wav')
     modes.register_mode( 'CombinationCutscene', Cutscene(image, sound, 1000, 'Room' ) )
+
+    ##Set up ending cutscene
+    image, _ = load_image( 'InsideBox.jpg' )
+    modes.register_mode('End', Cutscene(image, load_sound('None'), 5000, 'EndLetter'))
+
+    image, _ = load_image( 'AtticLetter.jpg' )
+    sound = load_sound('PaperOpening.wav')
+    modes.register_mode('EndLetter', Cutscene(image, sound, 2000, 'EndLetterOpen'))
+
+    image, _ = load_image( 'AtticLetterOpen.jpg' )
+    sound = load_sound('cookie.wav')
+    modes.register_mode('EndLetterOpen', Cutscene(image, sound, 5000, 'EndBoxBottom'))
+
+    image, _ = load_image( 'InsideBoxWithoutLetter.jpg' )
+    sound = load_sound('PaperOpening.wav')
+    modes.register_mode('EndBoxBottom', Cutscene(image, sound, 2000, 'EndFinal'))
+
+    image, _ = load_image( 'FinalMirror.jpg' )
+    sound = load_sound('cookie.wav')
+    modes.register_mode('EndFinal', Cutscene(image, sound, 5000, 'MainMenu'))
     
     pause_menu = PauseMenu()
     modes.register_mode('PauseMenu', pause_menu)
