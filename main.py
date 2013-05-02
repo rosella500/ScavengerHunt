@@ -273,7 +273,7 @@ def main():
                     elif pause == False:
                         #need some function to update the current note
                         #pause_menu.someMethod()
-                        ##pause_menu.update_current_note(room.globals['current_note'])
+                        pause_menu.update_current_note(room.globals['current_note'])
                         modes.switch_to_mode( 'PauseMenu' )
                         pause = True
                         print("game paused")
