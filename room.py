@@ -168,18 +168,25 @@ class Room( GameMode ):
                     self._changeRoom('Pepper')
                 elif hotspot.name == 'noteToToy':
                     self.globals['checkToyChest'] = 1
+                    self.globals['current_note'] = 'cookie.wav'
                 elif hotspot.name == 'noteToComputer':
                     self.globals['checkComputer'] = 1
+                    self.globals['current_note'] = 'cookie.wav'
                 elif hotspot.name == 'noteToMixtape':
                     self.globals['computerOn'] = 1
                     self.globals['checkMixtape'] = 1
+                    self.globals['current_note'] = 'cookie.wav'
                 elif hotspot.name == 'noteToYearbook':
                     self.globals['checkYearbook'] = 1
+                    self.globals['current_note'] = 'cookie.wav'
                 elif hotspot.name == 'noteToParents':
                     self.globals['checkParents'] = 1
+                    self.globals['current_note'] = 'cookie.wav'
                 elif hotspot.name == 'noteToDrugs':
                     self.globals['checkDrugs'] = 1
+                    self.globals['current_note'] = 'cookie.wav'
                 elif hotspot.name == 'flashback':
+                    self.globals['current_note'] = 'ReadCombination.wav'
                     self.globals['flashbacked'] = 1
                     self.globals['haveCombination'] = 1
                     self._changeRoom('Bedroom')

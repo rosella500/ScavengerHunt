@@ -102,6 +102,7 @@ class MainMenu( GameMode ):
             print 'Cannot load music:'
             raise SystemExit, message
         self.start_rect = pygame.Rect( 13, 77, 159, 36 )
+        self.quit_rect = pygame.Rect(14,117,97,32)
         
         self.mouse_down_pos = (-1,-1)
     
@@ -126,6 +127,9 @@ class MainMenu( GameMode ):
             global main_menu_bool
             main_menu_bool = False
             self.switch_to_mode( 'Intro' )
+        if collides_down_and_up( self.quit_rect ):
+            print 'Quit!'
+            self.quit()
     
     def draw( self, screen ):
         ## Draw the HUD.
